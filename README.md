@@ -20,11 +20,12 @@ Docker Workshop
   - Docker CLI basics
   - Docker Image & Container Basics
   - Docker Hub
-* 02-Exposing/publishing ports
-* 03-Container Linking
+* 02-Exposing-publishing ports
+* 03-Manage data in containers
 * 04-Docker container networking
-* 05-Manage data in containers
-* 06-Dockerfile
+  - Container linking
+  - Docker networks
+* 05-Dockerfile
   - Basics
   - ADD vs COPY
   - PID 1 Problem - reaping zombies
