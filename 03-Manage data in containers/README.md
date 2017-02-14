@@ -52,3 +52,11 @@ This command creates an anonymous /foo volume. When the container is removed, th
 ## Practice 5
 - `docker volume ls`
 - `docker volume prune`
+
+
+## Creating and mounting a data volume container
+If you have some persistent data that you want to share between containers, or want to use from non-persistent containers, it’s best to create a named Data Volume Container, and then to mount the data from it.
+
+## Practice 6
+- `docker create -v /dbdata --name dbstore postgres /bin/true`
+- `docker run -d --volumes-from dbstore --name db1 postgres`
