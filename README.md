@@ -26,9 +26,8 @@ Docker Workshop
   - Container linking
   - Docker networks
 * 05-Dockerfile
-  - Basics
-  - ADD vs COPY
-  - PID 1 Problem - reaping zombies
+  - Best practice
+  - Dockerfile Instructions
   - CMD vs ENTRYPOINT
-* 07-Docker Compose
-  - Basics
+  - PID 1 Problem - reaping zombies
+* 06-Docker Compose

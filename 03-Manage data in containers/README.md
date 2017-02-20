@@ -58,5 +58,12 @@ This command creates an anonymous /foo volume. When the container is removed, th
 If you have some persistent data that you want to share between containers, or want to use from non-persistent containers, it’s best to create a named Data Volume Container, and then to mount the data from it.
 
 ## Practice 6
-- `docker create -v /dbdata --name dbstore postgres /bin/true`
+- `docker create -v /var/lib/postgresql/data --name dbstore postgres /bin/true`
 - `docker run -d --volumes-from dbstore --name db1 postgres`
+- `docker run -d --volumes-from dbstore --name db2 postgres`
+
+Backup data
+- `docker run --rm --volumes-from dbstore -v $(pwd):/backup ubuntu tar cvf /backup/backup.tar /var/lib/postgresql/data`
+
+Restore data
+- `docker run --rm --volumes-from dbstore -v $(pwd):/backup ubuntu bash -c "cd /var/lib/postgresql/data && tar xvf /backup/backup.tar --strip 1"`
