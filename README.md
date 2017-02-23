@@ -8,11 +8,14 @@ Docker Workshop
 * Install Docker
   * OS X - [Download and Install](https://docs.docker.com/docker-for-mac/)
   * Linux - [Choose instructions for your linux distribution](https://docs.docker.com/engine/installation/)
+* Linux users - Install Docker Compose
+  * [Github Release Page](https://github.com/docker/compose/releases)
 * Open [Docker Hub](https://hub.docker.com/) Account
 
 ###Also required
 * JDK8, Maven (I presume that we all have this installed :) )
 * Favorite text editor (I recommend [Atom](https://atom.io/) + [language-docker package](https://atom.io/packages/language-docker))
+* Install REST API tooling - recommendation Google Chrome [Postman addon](https://www.getpostman.com/)
 
 
 ###This Workshop is separated in several sections
