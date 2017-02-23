@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/users
+    username: codecentric
+    password: codecentric
+    hikari:
+      maximum-pool-size: 5
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+  jackson:
+    deserialization:
+      fail_on_unknown_properties: false
+    serialization:
+      indent_output: true
+      write_dates_as_timestamps: false
+    parser:
+      allow_comments: true
+
+
+
+
+server:
+  port: 9090
+  compression:
+    enabled: true
+    min-response-size: 2048
+    mimeTypes:
+      - application/json
+      - application/json;charset=UTF-8
+  useForwardHeaders: true
+
+jwt:
+  key: o34S+YSevlvNyvx+Mblrxma5GWmdSLnbZ/dluThKqfquYw+3UiXJJifo6s5YqISRxMO7QiC5X0NlgZ3SFn1Wdg==
+
+logging:
+  level:
+    rs.codecentric: DEBUG
