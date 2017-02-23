@@ -6,34 +6,29 @@ Dockerfile reference for the FROM instruction
 
 Whenever possible, use current Official Repositories as the basis for your image.
 
-*LABEL*
+*ENV*
 
-Understanding object labels
+Dockerfile reference for the ENV instruction
 
-You can add labels to your image to help organize images by project, record licensing information, to aid in automation, or for other reasons. For each label, add a line beginning with LABEL and with one or more key-value pairs. The following examples show the different acceptable formats. Explanatory comments are included inline.
+In order to make new software easier to run, you can use ENV to update the PATH environment variable for the software your container installs. For example, `ENV PATH /usr/local/nginx/bin:$PATH` will ensure that `CMD [“nginx”]` just works.
 
-_Note: If your string contains spaces, it must be quoted or the spaces must be escaped. If your string contains inner quote characters ("), escape them as well._
+The ENV instruction is also useful for providing required environment variables specific to services you wish to containerize.
+
+Lastly, ENV can also be used to set commonly used version numbers so that version bumps are easier to maintain, as seen in the following example:
 
 ```
-# Set one or more individual labels
-LABEL com.example.version="0.0.1-beta"
-
-LABEL vendor="ACME Incorporated"
-
-LABEL com.example.release-date="2015-02-12"
-
-LABEL com.example.version.is-production=""
-
-##### Set multiple labels on one line
-LABEL com.example.version="0.0.1-beta" com.example.release-date="2015-02-12"
-
-# Set multiple labels at once, using line-continuation characters to break long lines
-LABEL vendor=ACME\ Incorporated \
-      com.example.is-beta= \
-      com.example.is-production="" \
-      com.example.version="0.0.1-beta" \
-      com.example.release-date="2015-02-12"
+ENV PG_MAJOR 9.3
+ENV PG_VERSION 9.3.4
+RUN curl -SL http://example.com/postgres-$PG_VERSION.tar.xz | tar -xJC /usr/src/postgress && …
+ENV PATH /usr/local/postgres-$PG_MAJOR/bin:$PATH
 ```
+
+Similar to having constant variables in a program (as opposed to hard-coding values), this approach lets you change a single ENV instruction to auto-magically bump the version of the software in your container.
+
+*ARG*
+
+The ARG instruction defines a variable that users can pass at build-time to the builder with the docker build command using the ``--build-arg <varname>=<value>`` flag. If a user specifies a build argument that was not defined in the Dockerfile, the build outputs a warning.
+
 
 *RUN*
 
@@ -126,6 +121,59 @@ _Note: Not all shells support the -o pipefail option. In such cases (such as the
 RUN ["/bin/bash", "-c", "set -o pipefail && wget -O - https://some.site | wc -l > /number"]
 ```
 
+*ADD or COPY*
+
+Dockerfile reference for the ADD instruction
+Dockerfile reference for the COPY instruction
+
+Although ADD and COPY are functionally similar, generally speaking, COPY is preferred. That’s because it’s more transparent than ADD. COPY only supports the basic copying of local files into the container, while ADD has some features (like local-only tar extraction and remote URL support) that are not immediately obvious. Consequently, the best use for ADD is local tar file auto-extraction into the image, as in `ADD rootfs.tar.xz /`.
+
+If you have multiple Dockerfile steps that use different files from your context, COPY them individually, rather than all at once. This will ensure that each step’s build cache is only invalidated (forcing the step to be re-run) if the specifically required files change.
+
+For example:
+```
+COPY requirements.txt /tmp/
+RUN pip install --requirement /tmp/requirements.txt
+COPY . /tmp/
+```
+
+Results in fewer cache invalidations for the RUN step, than if you put the COPY . /tmp/ before it.
+
+Because image size matters, using ADD to fetch packages from remote URLs is strongly discouraged; you should use curl or wget instead. That way you can delete the files you no longer need after they’ve been extracted and you won’t have to add another layer in your image. For example, you should avoid doing things like:
+
+```
+ADD http://example.com/big.tar.xz /usr/src/things/
+RUN tar -xJf /usr/src/things/big.tar.xz -C /usr/src/things
+RUN make -C /usr/src/things all
+```
+
+And instead, do something like:
+
+```
+RUN mkdir -p /usr/src/things \
+    && curl -SL http://example.com/big.tar.xz \
+    | tar -xJC /usr/src/things \
+    && make -C /usr/src/things all
+```
+
+For other items (files, directories) that do not require ADD’s tar auto-extraction capability, you should always use COPY.
+
+
+*VOLUME*
+
+Dockerfile reference for the VOLUME instruction
+
+The VOLUME instruction should be used to expose any database storage area, configuration storage, or files/folders created by your docker container. You are strongly encouraged to use VOLUME for any mutable and/or user-serviceable parts of your image.
+
+*EXPOSE*
+
+Dockerfile reference for the EXPOSE instruction
+
+The EXPOSE instruction indicates the ports on which a container will listen for connections. Consequently, you should use the common, traditional port for your application. For example, an image containing the Apache web server would use `EXPOSE 80`, while an image containing MongoDB would use `EXPOSE 27017` and so on.
+
+For external access, your users can execute docker run with a flag indicating how to map the specified port to the port of their choice.
+
+
 *CMD*
 
 Dockerfile reference for the CMD instruction
@@ -205,97 +253,3 @@ Lastly, it could also be used to start a totally different tool, such as Bash:
 ```
 $ docker run --rm -it postgres bash
 ```
-
-*EXPOSE*
-
-Dockerfile reference for the EXPOSE instruction
-
-The EXPOSE instruction indicates the ports on which a container will listen for connections. Consequently, you should use the common, traditional port for your application. For example, an image containing the Apache web server would use `EXPOSE 80`, while an image containing MongoDB would use `EXPOSE 27017` and so on.
-
-For external access, your users can execute docker run with a flag indicating how to map the specified port to the port of their choice.
-
-*ENV*
-
-Dockerfile reference for the ENV instruction
-
-In order to make new software easier to run, you can use ENV to update the PATH environment variable for the software your container installs. For example, `ENV PATH /usr/local/nginx/bin:$PATH` will ensure that `CMD [“nginx”]` just works.
-
-The ENV instruction is also useful for providing required environment variables specific to services you wish to containerize.
-
-Lastly, ENV can also be used to set commonly used version numbers so that version bumps are easier to maintain, as seen in the following example:
-
-```
-ENV PG_MAJOR 9.3
-ENV PG_VERSION 9.3.4
-RUN curl -SL http://example.com/postgres-$PG_VERSION.tar.xz | tar -xJC /usr/src/postgress && …
-ENV PATH /usr/local/postgres-$PG_MAJOR/bin:$PATH
-```
-
-Similar to having constant variables in a program (as opposed to hard-coding values), this approach lets you change a single ENV instruction to auto-magically bump the version of the software in your container.
-
-*ARG*
-
-The ARG instruction defines a variable that users can pass at build-time to the builder with the docker build command using the ``--build-arg <varname>=<value>`` flag. If a user specifies a build argument that was not defined in the Dockerfile, the build outputs a warning.
-
-
-
-*ADD or COPY*
-
-Dockerfile reference for the ADD instruction
-Dockerfile reference for the COPY instruction
-
-Although ADD and COPY are functionally similar, generally speaking, COPY is preferred. That’s because it’s more transparent than ADD. COPY only supports the basic copying of local files into the container, while ADD has some features (like local-only tar extraction and remote URL support) that are not immediately obvious. Consequently, the best use for ADD is local tar file auto-extraction into the image, as in `ADD rootfs.tar.xz /`.
-
-If you have multiple Dockerfile steps that use different files from your context, COPY them individually, rather than all at once. This will ensure that each step’s build cache is only invalidated (forcing the step to be re-run) if the specifically required files change.
-
-For example:
-```
-COPY requirements.txt /tmp/
-RUN pip install --requirement /tmp/requirements.txt
-COPY . /tmp/
-```
-
-Results in fewer cache invalidations for the RUN step, than if you put the COPY . /tmp/ before it.
-
-Because image size matters, using ADD to fetch packages from remote URLs is strongly discouraged; you should use curl or wget instead. That way you can delete the files you no longer need after they’ve been extracted and you won’t have to add another layer in your image. For example, you should avoid doing things like:
-
-```
-ADD http://example.com/big.tar.xz /usr/src/things/
-RUN tar -xJf /usr/src/things/big.tar.xz -C /usr/src/things
-RUN make -C /usr/src/things all
-```
-
-And instead, do something like:
-
-```
-RUN mkdir -p /usr/src/things \
-    && curl -SL http://example.com/big.tar.xz \
-    | tar -xJC /usr/src/things \
-    && make -C /usr/src/things all
-```
-
-For other items (files, directories) that do not require ADD’s tar auto-extraction capability, you should always use COPY.
-
-
-*VOLUME*
-
-Dockerfile reference for the VOLUME instruction
-
-The VOLUME instruction should be used to expose any database storage area, configuration storage, or files/folders created by your docker container. You are strongly encouraged to use VOLUME for any mutable and/or user-serviceable parts of your image.
-
-*USER*
-
-Dockerfile reference for the USER instruction
-
-If a service can run without privileges, use USER to change to a non-root user. Start by creating the user and group in the Dockerfile with something like `RUN groupadd -r postgres && useradd -r -g postgres postgres`.
-
-_Note: Users and groups in an image get a non-deterministic UID/GID in that the “next” UID/GID gets assigned regardless of image rebuilds. So, if it’s critical, you should assign an explicit UID/GID.
-You should avoid installing or using sudo since it has unpredictable TTY and signal-forwarding behavior that can cause more problems than it solves. If you absolutely need functionality similar to sudo (e.g., initializing the daemon as root but running it as non-root), you may be able to use “gosu”._
-
-_Lastly, to reduce layers and complexity, avoid switching USER back and forth frequently._
-
-*WORKDIR*
-
-Dockerfile reference for the WORKDIR instruction
-
-For clarity and reliability, you should always use absolute paths for your WORKDIR. Also, you should use WORKDIR instead of proliferating instructions like RUN cd … && do-something, which are hard to read, troubleshoot, and maintain.

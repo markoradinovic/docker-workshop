@@ -6,6 +6,6 @@
 - `docker run --name nginx -p :80 -d nginx`
   - what is the difference?
 - `docker run --name nginx -p 8888:80 -d nginx`
-  - share your nginx url (Slack)
+  - try to access
 - `docker run --name nginx -p 127.0.0.1::80 -d nginx`
 - `docker run --name nginx -p 127.0.0.1:80:80 -d nginx`
