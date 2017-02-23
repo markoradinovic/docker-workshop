@@ -1,5 +1,13 @@
 ### CMD vs ENTRYPOINT
 
+Interesting reading:
+
+[Dockerfile: ENTRYPOINT vs CMD](https://www.ctl.io/developers/blog/post/dockerfile-entrypoint-vs-cmd/)
+
+[Docker RUN vs CMD vs ENTRYPOINT](http://goinbigdata.com/docker-run-vs-cmd-vs-entrypoint/)
+
+[Docker CMD vs RUN vs ENTRYPOINT](http://mnkartik.github.io/docker/docker-160)
+
 Both CMD and ENTRYPOINT instructions define what command gets executed when running a container. There are few rules that describe their co-operation.
 
 Dockerfile should specify at least one of CMD or ENTRYPOINT commands.
