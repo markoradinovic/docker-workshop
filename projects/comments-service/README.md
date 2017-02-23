@@ -1,5 +1,7 @@
 ### Comments Service
 
+You will need [Elasticsearch](https://hub.docker.com/_/elasticsearch/) and optionally [Kibana](https://hub.docker.com/_/kibana/) with SenseUI.
+
 *Add comment*
 
 POST /api/v1/comment
