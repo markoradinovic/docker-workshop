@@ -4,17 +4,27 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldIndex;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 public class User {
 
-    @Field(index = FieldIndex.not_analyzed)
+    @Field(index = FieldIndex.not_analyzed, type = FieldType.String)
     private String username;
 
-    @Field(index = FieldIndex.not_analyzed)
+    @Field(index = FieldIndex.not_analyzed, type = FieldType.String)
     private String email;
 
-    @Field(index = FieldIndex.analyzed)
+    @Field(index = FieldIndex.analyzed, type = FieldType.String)
     private String fullName;
+
+    public User() {
+    }
+
+    public User(String username, String email, String fullName) {
+        this.username = username;
+        this.email = email;
+        this.fullName = fullName;
+    }
 
     public String getUsername() {
         return username;

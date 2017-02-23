@@ -1,4 +1,31 @@
 spring:
+  application:
+    name: comments-service
   data:
-    elasticsearch:
-      cluster-nodes: localhost:9300
+      elasticsearch:
+        cluster-nodes: localhost:9300
+  jackson:
+    deserialization:
+      fail_on_unknown_properties: false
+    serialization:
+      indent_output: true
+      write_dates_as_timestamps: false
+    parser:
+      allow_comments: true
+
+server:
+  port: 9080
+  compression:
+    enabled: true
+    min-response-size: 2048
+    mimeTypes:
+      - application/json
+      - application/json;charset=UTF-8
+  useForwardHeaders: true
+
+jwt:
+  key: o34S+YSevlvNyvx+Mblrxma5GWmdSLnbZ/dluThKqfquYw+3UiXJJifo6s5YqISRxMO7QiC5X0NlgZ3SFn1Wdg==
+
+logging:
+  level:
+    rs.codecentric: DEBUG

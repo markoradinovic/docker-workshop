@@ -21,9 +21,6 @@ spring:
     parser:
       allow_comments: true
 
-
-
-
 server:
   port: 9090
   compression:

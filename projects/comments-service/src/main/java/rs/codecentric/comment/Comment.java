@@ -1,11 +1,13 @@
 package rs.codecentric.comment;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Document(indexName = "comments", type = "Comment", shards = 1, replicas = 0, refreshInterval = "-1")
 public class Comment {
@@ -13,17 +15,19 @@ public class Comment {
     @Id
     private String id;
 
-    @Field(index = FieldIndex.not_analyzed)
+    @Field(index = FieldIndex.not_analyzed, type = FieldType.String)
+    @NotBlank(message = "TopicId is required")
     private String topicId;
 
-    @Field(index = FieldIndex.analyzed)
+    @Field(index = FieldIndex.analyzed, type = FieldType.String)
     private String comment;
 
     @Field(type = FieldType.Object)
     private User commentedBy;
 
-    @Field(type = FieldType.Date, format = DateFormat.date_time_no_millis)
-    private LocalDateTime commentedAt;
+    @Field(type = FieldType.Date)
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
+    private Date commentedAt;
 
     public String getId() {
         return id;
@@ -57,11 +61,11 @@ public class Comment {
         this.commentedBy = commentedBy;
     }
 
-    public LocalDateTime getCommentedAt() {
+    public Date getCommentedAt() {
         return commentedAt;
     }
 
-    public void setCommentedAt(LocalDateTime commentedAt) {
+    public void setCommentedAt(Date commentedAt) {
         this.commentedAt = commentedAt;
     }
 
