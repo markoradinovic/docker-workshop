@@ -26,7 +26,6 @@ public class Comment {
     private User commentedBy;
 
     @Field(type = FieldType.Date)
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZZ")
     private Date commentedAt;
 
     public String getId() {
