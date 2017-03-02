@@ -8,13 +8,14 @@ Docker Workshop
 * Install Docker
   * OS X - [Download and Install](https://docs.docker.com/docker-for-mac/)
   * Linux - [Choose instructions for your linux distribution](https://docs.docker.com/engine/installation/)
+  * Windows 10 - [Download and Install](https://docs.docker.com/docker-for-windows/)
 * Linux users - Install Docker Compose
   * [Github Release Page](https://github.com/docker/compose/releases)
 * Open [Docker Hub](https://hub.docker.com/) Account
 
 ###Also required
 * JDK8, Maven (I presume that we all have this installed :) )
-* Favorite text editor (I recommend [Atom](https://atom.io/) + [language-docker package](https://atom.io/packages/language-docker))
+* Favorite text editor (I recommend [Atom](https://atom.io/) + [language-docker package](https://atom.io/packages/language-docker)). If you are using Atom, it is helpfull to enable invisible symbols (Settings -> Editor -> Show Invisibles)
 * Install REST API tooling - recommendation Google Chrome [Postman addon](https://www.getpostman.com/)
 
 
