@@ -1,4 +1,4 @@
-DROP TABLE users CASCADE ;
+/*DROP TABLE users CASCADE ;*/
 CREATE TABLE users
 (
   id_user BIGSERIAL NOT NULL,

@@ -1,1 +1,5 @@
-docker run -it --rm -v /Users/markoradinovic/git/docker-workshop/projects/user-service/sql/database.sql:/database.sql --link db:postgres postgres psql -h postgres -U codecentric -d users -a -f /database.sql
+docker run -it --rm \
+-v /Users/markoradinovic/git/docker-workshop/projects/user-service/sql/database.sql:/database.sql  \
+--link db:postgres \
+postgres \
+psql -h postgres -U codecentric -d users -a -f /database.sql
