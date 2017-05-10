@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  user-service:
+    image: markoradinovic/user-service:0.0.1
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/users
+      - SPRING_DATASOURCE_USERNAME=marko
+      - SPRING_DATASOURCE_PASSWORD=marko
+    # ports:
+    #   - "9090:9090"
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=marko
+      - POSTGRES_PASSWORD=marko
+
+  # pgadmin:
+  #   image: fenglc/pgadmin4
+  #   ports:
+  #     - "5050:5050"

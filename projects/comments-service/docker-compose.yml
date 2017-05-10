@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  comments-service:
+    image: markoradinovic/comments-service:0.0.1
+    environment:
+      - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=elk:9300
+      - JAVA_OPTS=-Xms256m -Xmx256m
+    ports:
+      - "9080:9080"
+    depends_on:
+      - elk
+
+  elk:
+    image: elasticsearch:2.4
+    ports:
+      - "19200:9200"
