@@ -47,9 +47,9 @@ The network named bridge is a special network. Unless you tell it otherwise, Doc
   - What just happend?
 
 ## Practice 3
-- `docker network create -d bridge --attachable my-bridge-network`
-- `docker run --name nginx -d --net my-bridge-network nginx `
-- `docker run --rm -it --net my-bridge-network markoradinovic/alpine-util bash `
-- `curl http://web`
+- `docker network create -d bridge --attachable my-network`
+- `docker run --name nginx -d --network my-network nginx `
+- `docker run --rm -it --network my-network markoradinovic/alpine-util bash `
+- `curl http://nginx`
 - `cat /etc/host`
   - What just happend?
